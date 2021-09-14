@@ -6,7 +6,28 @@ import logging
 import struct
 import sys
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'secret_key')
+
+def passwd_file(file_env_name, env_name, default='PlsChgMe!'):
+    """
+    Get content of file path if exists or environment value or default value
+
+    :param file_env_name: Environment var name with path of password file
+    :param pass_env_name: Environment var name with password
+    :default pass_env_name: Default value
+
+    :returns: String conten of file or env or default
+    """
+    file_name = os.environ.get(file_env_name, None)
+    if file_name:
+        if os.path.exists(file_name) and os.access(file_name, os.R_OK):
+            with open(file_name, 'r') as file_open:
+                return file_open.read()
+    return os.environ.get(env_name, default)
+
+#change this to your secret key
+SECRET_KEY = passwd_file(
+    'SECRET_KEY_FILE', 'SECRET_KEY',
+    'secret_key')
 HOST = os.environ.get('HOST', 'localhost')
 DATABASE = os.environ.get('DATABASE', 'ejabberd')
 USER = os.environ.get('DATABASE_USER', 'ejabberd_user')
