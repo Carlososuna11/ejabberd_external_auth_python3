@@ -1,0 +1,1 @@
+# Ejabberd External Authentication Plugin with Python3 and PostgreSQL
